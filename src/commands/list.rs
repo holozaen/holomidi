@@ -24,13 +24,23 @@ pub fn execute() -> Result<(), String> {
 mod tests {
     use super::*;
 
-    // Since this command interacts with actual MIDI devices,
-    // we should mock the MidiInput and MidiOutput traits
-
     #[test]
     fn test_execute_no_ports() {
-        // This test will pass on systems with no MIDI devices
         let result = execute();
-        assert!(result.is_ok());
+        match result {
+            Ok(_) => {
+                // OK: system has MIDI support and listing succeeded.
+            }
+            Err(e) => {
+                // Accept common initialization errors on CI / headless systems.
+                assert!(
+                    e.contains("Error creating MIDI input")
+                        || e.contains("Error creating MIDI output")
+                        || e.contains("No MIDI device found"),
+                    "unexpected error: {}",
+                    e
+                );
+            }
+        }
     }
 }
