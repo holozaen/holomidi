@@ -3,9 +3,9 @@ name = "holomidi"
 version = "0.0.1"
 edition = "2024"
 
-[dependencies]
 [target.'cfg(windows)'.dependencies]
 midir = "0.8"
 
 [target.'cfg(unix)'.dependencies]
-midir = { version = "0.8", features = ["alsa"] }
+midir = "0.8"
+alsa-sys = "0.3"
